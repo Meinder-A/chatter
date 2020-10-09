@@ -46,22 +46,6 @@ Route::group([
     ]);
 
     /*
-     * Auth routes.
-     */
-
-    // Login view.
-    Route::get('login', [
-        'as'   => 'login',
-        'uses' => 'ForumController@login',
-    ]);
-
-    // Register view.
-    Route::get('register', [
-        'as'   => 'register',
-        'uses' => 'ForumController@register',
-    ]);
-
-    /*
      * Discussion routes.
      */
     Route::group([

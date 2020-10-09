@@ -22,7 +22,7 @@
 
 <div id="forum" class="discussion">
 
-	<div id="forum_header" style="background-color:{{ $discussion->color }}">
+	<div id="forum_header" style="background-color:#263238;">
 		<div class="container">
 			<a class="back_btn" href="/{{ config('forum.routes.home') }}"><i class="forum-back"></i></a>
 			<h1>{{ $discussion->title }}</h1><span class="forum_head_details"> @lang('forum::messages.discussion.head_details')<a class="forum_cat" href="/{{ config('forum.routes.home') }}/{{ config('forum.routes.category') }}/{{ $discussion->category->slug }}" style="background-color:{{ $discussion->category->color }}">{{ $discussion->category->name }}</a></span>
@@ -80,7 +80,7 @@
             @endif
 
 				<div class="conversation">
-	                <ul class="discussions no-bg" style="display:block;">
+	                <ul class="discussions" style="display:block;">
 	                	@foreach($posts as $post)
 	                		<li data-id="{{ $post->id }}" data-markdown="{{ $post->markdown }}">
 		                		<span class="forum_posts">
@@ -100,36 +100,21 @@
 			                			</div>
 			                		@endif
 			                		<div class="forum_avatar">
-					        			@if(config('forum.user.avatar_image_database_field'))
-
-					        				<?php $db_field = config('forum.user.avatar_image_database_field'); ?>
-
-					        				<!-- If the user db field contains http:// or https:// we don't need to use the relative path to the image assets -->
-					        				@if( (substr($post->user->{$db_field}, 0, 7) == 'http://') || (substr($post->user->{$db_field}, 0, 8) == 'https://') )
-					        					<img src="{{ $post->user->{$db_field}  }}">
-					        				@else
-					        					<img src="{{ config('forum.user.relative_url_to_image_assets') . $post->user->{$db_field}  }}">
-					        				@endif
-
-					        			@else
-					        				<span class="forum_avatar_circle" style="background-color:#<?= \MeinderA\Forum\Helpers\ForumHelper::stringToColorCode($post->user->{config('forum.user.database_field_with_user_name')}) ?>">
-					        					{{ ucfirst(substr($post->user->{config('forum.user.database_field_with_user_name')}, 0, 1)) }}
-					        				</span>
-					        			@endif
+					        			<div class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out">
+											<img class="h-8 w-8 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
+										</div>
 					        		</div>
 
 					        		<div class="forum_middle">
 					        			<span class="forum_middle_details"><a href="{{ \MeinderA\Forum\Helpers\ForumHelper::userLink($post->user) }}">{{ ucfirst($post->user->{config('forum.user.database_field_with_user_name')}) }}</a> <span class="ago forum_middle_details">{{ \Carbon\Carbon::createFromTimeStamp(strtotime($post->created_at))->diffForHumans() }}</span></span>
-					        			<div class="forum_body">
-
+					        			<div class="forum_body text-gray-100">
 					        				@if($post->markdown)
-					        					<pre class="forum_body_md">{{ $post->body }}</pre>
+					        					<pre class="forum_body_md text-gray-100">{{ $post->body }}</pre>
 					        					<?= \MeinderA\Forum\Helpers\ForumHelp::demoteHtmlHeaderTags( GrahamCampbell\Markdown\Facades\Markdown::convertToHtml( $post->body ) ); ?>
 					        					<!--?= GrahamCampbell\Markdown\Facades\Markdown::convertToHtml( $post->body ); ?-->
 					        				@else
 					        					<?= $post->body; ?>
 					        				@endif
-
 					        			</div>
 					        		</div>
 
@@ -149,22 +134,9 @@
 	            	<div id="new_response">
 
 	            		<div class="forum_avatar">
-		        			@if(config('forum.user.avatar_image_database_field'))
-
-		        				<?php $db_field = config('forum.user.avatar_image_database_field'); ?>
-
-		        				<!-- If the user db field contains http:// or https:// we don't need to use the relative path to the image assets -->
-		        				@if( (substr(Auth::user()->{$db_field}, 0, 7) == 'http://') || (substr(Auth::user()->{$db_field}, 0, 8) == 'https://') )
-		        					<img src="{{ Auth::user()->{$db_field}  }}">
-		        				@else
-		        					<img src="{{ config('forum.user.relative_url_to_image_assets') . Auth::user()->{$db_field}  }}">
-		        				@endif
-
-		        			@else
-		        				<span class="forum_avatar_circle" style="background-color:#<?= \MeinderA\Forum\Helpers\ForumHelper::stringToColorCode(Auth::user()->{config('forum.user.database_field_with_user_name')}) ?>">
-		        					{{ strtoupper(substr(Auth::user()->{config('forum.user.database_field_with_user_name')}, 0, 1)) }}
-		        				</span>
-		        			@endif
+							<div class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out">
+								<img class="h-8 w-8 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
+							</div>
 		        		</div>
 
 			            <div id="new_discussion">

@@ -19,11 +19,11 @@
 
 <div id="forum" class="forum_home">
 
-	<div id="forum_header" style="background-color:green">
-		<div class="container">
-			<h1>@lang('forum::intro.headline')</h1>
-		</div>
-	</div>
+{{--	<div id="forum_header" style="background-color:#263238;">--}}
+{{--		<div class="container">--}}
+{{--			<h1>@lang('forum::intro.headline')</h1>--}}
+{{--		</div>--}}
+{{--	</div>--}}
 
 	@if(config('forum.errors'))
 		@if(Session::has('forum_alert'))
@@ -58,9 +58,11 @@
 	    	<div class="col-md-3 left-column">
 	    		<!-- SIDEBAR -->
 	    		<div class="forum_sidebar">
-					<button class="btn btn-primary" id="new_discussion_btn"><i class="forum-new"></i> @lang('forum::messages.discussion.new')</button>
-					<a href="/{{ config('forum.routes.home') }}"><i class="forum-bubble"></i> @lang('forum::messages.discussion.all')</a>
-          {!! $categoriesMenu !!}
+					<a class="mb-3 text-center p-3 font-weight-bold rounded" style="background-color: rgba(255, 255, 255, 0.03);" href="#" id="new_discussion_btn"><i class="forum-new"></i> @lang('forum::messages.discussion.new')</a>
+					<a class="mb-3 p-0" href="/{{ config('forum.routes.home') }}"><i class="forum-bubble"></i> @lang('forum::messages.discussion.all')</a>
+					<div class="md:d-block d-inline-flex w-full md:w-auto">
+          				{!! $categoriesMenu !!}
+					</div>
 				</div>
 				<!-- END SIDEBAR -->
 	    	</div>
@@ -71,28 +73,13 @@
 				        	<li>
 				        		<a class="discussion_list" href="/{{ config('forum.routes.home') }}/{{ config('forum.routes.discussion') }}/{{ $discussion->category->slug }}/{{ $discussion->slug }}">
 					        		<div class="forum_avatar">
-					        			@if(config('forum.user.avatar_image_database_field'))
-
-					        				<?php $db_field = config('forum.user.avatar_image_database_field'); ?>
-
-					        				<!-- If the user db field contains http:// or https:// we don't need to use the relative path to the image assets -->
-					        				@if( (substr($discussion->user->{$db_field}, 0, 7) == 'http://') || (substr($discussion->user->{$db_field}, 0, 8) == 'https://') )
-					        					<img src="{{ $discussion->user->{$db_field}  }}">
-					        				@else
-					        					<img src="{{ config('forum.user.relative_url_to_image_assets') . $discussion->user->{$db_field}  }}">
-					        				@endif
-
-					        			@else
-
-					        				<span class="forum_avatar_circle" style="background-color:#<?= \MeinderA\Forum\Helpers\ForumHelper::stringToColorCode($discussion->user->{config('forum.user.database_field_with_user_name')}) ?>">
-					        					{{ strtoupper(substr($discussion->user->{config('forum.user.database_field_with_user_name')}, 0, 1)) }}
-					        				</span>
-
-					        			@endif
+										<button class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out">
+											<img class="h-8 w-8 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
+										</button>
 					        		</div>
 
 					        		<div class="forum_middle">
-					        			<h3 class="forum_middle_title">{{ $discussion->title }} <div class="forum_cat" style="background-color:{{ $discussion->category->color }}">{{ $discussion->category->name }}</div></h3>
+					        			<h3 class="forum_middle_title" style="color: #fff;">{{ $discussion->title }} <div class="forum_cat" style="background-color:{{ $discussion->category->color }}">{{ $discussion->category->name }}</div></h3>
 					        			<span class="forum_middle_details">@lang('forum::messages.discussion.posted_by') <span data-href="/user">{{ ucfirst($discussion->user->{config('forum.user.database_field_with_user_name')}) }}</span> {{ \Carbon\Carbon::createFromTimeStamp(strtotime($discussion->created_at))->diffForHumans() }}</span>
 					        			@if($discussion->post[0]->markdown)
 					        				<?php $discussion_body = GrahamCampbell\Markdown\Facades\Markdown::convertToHtml( $discussion->post[0]->body ); ?>

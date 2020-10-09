@@ -3,11 +3,11 @@
 namespace MeinderA\Forum\Controllers;
 
 use Carbon\Carbon;
+use SimpleXMLElement;
 use MeinderA\Forum\Models\Discussion;
 use Illuminate\Routing\Controller as Controller;
-use SimpleXMLElement;
 
-class ForumAttomController extends Controller
+class ForumAtomController extends Controller
 {
     /**
      * Create an feed response for whole forum section.

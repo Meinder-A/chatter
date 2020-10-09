@@ -302,11 +302,11 @@ body {
 }
 #forum ul.discussions li a.discussion_list,
 #forum ul.discussions li .forum_posts {
-  background: #ffffff;
+  background: #201E2D;
   padding: 15px;
   -webkit-transition: background 0.3s ease;
   transition: background 0.3s ease;
-  border-top: 1px solid #f1fcff;
+  border-top: 1px solid #00000038;
   text-decoration: none;
   display: block;
   position: relative;
@@ -357,7 +357,7 @@ body {
   cursor: pointer;
   padding: 3px 10px;
   margin-right: 10px;
-  color: #B1BcBf;
+  color: #474d4f;
   -webkit-transition: color 0.3s linear;
   transition: color 0.3s linear;
 }
@@ -479,7 +479,7 @@ body {
 }
 #forum ul.discussions li .forum_posts .forum_middle > span a {
   font-weight: bold;
-  color: #131619;
+  color: rgb(230,230,230);
   font-size: 14px;
 }
 #forum ul.discussions li .forum_posts .forum_middle > span .ago {
@@ -497,7 +497,7 @@ body {
 }
 #forum ul.discussions li .forum_posts .forum_middle p {
   font-size: 14px;
-  color: #151a1f;
+  color: #fff;
 }
 #forum ul.discussions li.editing {
   overflow: hidden;

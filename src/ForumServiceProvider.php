@@ -26,8 +26,7 @@ class ForumServiceProvider extends ServiceProvider
         ], 'forum_seeders');
 
 
-        // include the routes file
-        include __DIR__.'/Routes/web.php';
+        $this->loadRoutesFrom(__DIR__ . '/Routes/web.php');
     }
 
     /**

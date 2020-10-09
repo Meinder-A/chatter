@@ -103,10 +103,10 @@ class ForumHelper
      */
     public static function categoriesMenu($categories)
     {
-        $menu = '<ul class="nav nav-pills nav-stacked">';
+        $menu = '<ul class="nav nav-pills nav-stacked" style="display: block;">';
 
         foreach ($categories as $category) {
-            $menu .= '<li>';
+            $menu .= '<li style="display: block;">';
             $menu .= '<a href="/'.config('forum.routes.home').'/'.config('forum.routes.category').'/'.$category['slug'].'">';
             $menu .= '<div class="forum-box" style="background-color:'.$category['color'].'"></div>';
             $menu .= $category['name'].'</a>';

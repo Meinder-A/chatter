@@ -31,7 +31,7 @@ return [
     |
     */
 
-    'headline'      => 'Welcome to forum',
+    'headline'      => 'Welcome to ' . config('app.name'),
     'description'   => 'A simple forum package for your Laravel app.',
 
 ];
