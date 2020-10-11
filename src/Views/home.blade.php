@@ -58,7 +58,9 @@
 	    	<div class="col-md-3 left-column">
 	    		<!-- SIDEBAR -->
 	    		<div class="forum_sidebar">
+					@auth
 					<a class="mb-3 text-center p-3 font-weight-bold rounded" style="background-color: rgba(255, 255, 255, 0.03);" href="#" id="new_discussion_btn"><i class="forum-new"></i> @lang('forum::messages.discussion.new')</a>
+					@endauth
 					<a class="mb-3 p-0" href="/{{ config('forum.routes.home') }}"><i class="forum-bubble"></i> @lang('forum::messages.discussion.all')</a>
 					<div class="md:d-block d-inline-flex w-full md:w-auto">
           				{!! $categoriesMenu !!}
@@ -74,7 +76,7 @@
 				        		<a class="discussion_list" href="/{{ config('forum.routes.home') }}/{{ config('forum.routes.discussion') }}/{{ $discussion->category->slug }}/{{ $discussion->slug }}">
 					        		<div class="forum_avatar">
 										<button class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out">
-											<img class="h-8 w-8 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
+											<img class="h-8 w-8 rounded-full object-cover" src="{{ $discussion->user->profile_photo_url }}" alt="{{ $discussion->user->name }}" />
 										</button>
 					        		</div>
 

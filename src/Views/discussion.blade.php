@@ -84,7 +84,7 @@
 	                	@foreach($posts as $post)
 	                		<li data-id="{{ $post->id }}" data-markdown="{{ $post->markdown }}">
 		                		<span class="forum_posts">
-		                			@if(!Auth::guest() && (Auth::user()->id == $post->user->id))
+		                			@if(!Auth::guest() && ((Auth::user()->id == $post->user->id) || in_array(Auth::user()->role, ['administrator', 'moderator'])))
 		                				<div id="delete_warning_{{ $post->id }}" class="forum_warning_delete">
 		                					<i class="forum-warning"></i> @lang('forum::messages.response.confirm')
 		                					<button class="btn btn-sm btn-danger pull-right delete_response">@lang('forum::messages.response.yes_confirm')</button>
@@ -101,7 +101,7 @@
 			                		@endif
 			                		<div class="forum_avatar">
 					        			<div class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out">
-											<img class="h-8 w-8 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
+											<img class="h-8 w-8 rounded-full object-cover" src="{{ $post->user->profile_photo_url }}" alt="{{ $post->user->name }}" />
 										</div>
 					        		</div>
 
@@ -185,7 +185,7 @@
 
 				@else
 
-					<div id="login_or_register">
+					<div id="login_or_register" class="text-gray-100">
 						<p>
                             @lang('forum::messages.auth', ['home' => config('forum.routes.home')])
                         </p>
@@ -323,7 +323,7 @@
 			container.prepend('<textarea id="post-edit-' + id + '"></textarea>');
             // Client side XSS fix
             $("#post-edit-"+id).text(body.html());
-			container.append('<div class="forum_update_actions"><button class="btn btn-success pull-right update_forum_edit"  data-id="' + id + '" data-markdown="' + markdown + '"><i class="forum-check"></i> @lang('forum::messages.response.update')</button><button href="/" class="btn btn-default pull-right cancel_forum_edit" data-id="' + id + '"  data-markdown="' + markdown + '">@lang('forum::messages.words.cancel')</button></div>');
+			container.append('<div class="forum_update_actions"><button class="btn btn-default border pull-right update_forum_edit"  data-id="' + id + '" data-markdown="' + markdown + '"><i class="forum-check"></i> @lang('forum::messages.response.update')</button><button href="/" class="btn btn-default pull-right cancel_forum_edit" data-id="' + id + '"  data-markdown="' + markdown + '">@lang('forum::messages.words.cancel')</button></div>');
 
 			// create new editor from text area
 			if(markdown){

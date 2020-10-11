@@ -172,7 +172,7 @@ class ForumPostController extends Controller
         }
 
         $post = Models::post()->find($id);
-        if (!Auth::guest() && (Auth::user()->id == $post->user_id)) {
+        if (!Auth::guest() && ((Auth::user()->id == $post->user_id) || in_array(Auth::user()->role, ['administrator', 'moderator']))) {
             if ($post->markdown) {
                 $post->body = $request->body;
             } else {
