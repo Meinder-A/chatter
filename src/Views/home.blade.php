@@ -138,31 +138,6 @@
 										</div>
 									</div>
 								</a>
-{{--				        		<a class="discussion_list" href="/{{ config('forum.routes.home') }}/{{ config('forum.routes.discussion') }}/{{ $discussion->category->slug }}/{{ $discussion->slug }}">--}}
-{{--					        		<div class="forum_avatar hidden md:block">--}}
-{{--										<button class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-200 transition duration-150 ease-in-out">--}}
-{{--											<img class="h-8 w-8 rounded-full object-cover" src="{{ $discussion->user->profile_photo_url }}" alt="{{ $discussion->user->name }}" />--}}
-{{--										</button>--}}
-{{--					        		</div>--}}
-
-{{--					        		<div class="ml-0 md:ml-3 sm:w-full forum_middle">--}}
-{{--					        			<h3 class="forum_middle_title" style="color: #fff;">{{ $discussion->title }} <div class="forum_cat" style="background-color:{{ $discussion->category->color }}">{{ $discussion->category->name }}</div></h3>--}}
-{{--					        			<span class="forum_middle_details">@lang('forum::messages.discussion.posted_by') <span data-href="/user">{{ ucfirst($discussion->user->{config('forum.user.database_field_with_user_name')}) }}</span> {{ \Carbon\Carbon::createFromTimeStamp(strtotime($discussion->created_at))->diffForHumans() }}</span>--}}
-{{--					        			@if($discussion->post[0]->markdown)--}}
-{{--					        				<?php $discussion_body = GrahamCampbell\Markdown\Facades\Markdown::convertToHtml( $discussion->post[0]->body ); ?>--}}
-{{--					        			@else--}}
-{{--					        				<?php $discussion_body = $discussion->post[0]->body; ?>--}}
-{{--					        			@endif--}}
-{{--					        			<p>{{ substr(strip_tags($discussion_body), 0, 200) }}@if(strlen(strip_tags($discussion_body)) > 200){{ '...' }}@endif</p>--}}
-{{--					        		</div>--}}
-
-{{--					        		<div class="forum_right w-1/4 text-sm">--}}
-
-{{--					        			<div class="font-bold forum_count" style="font-size: 13px !important;"><i class="font-weiforum-bubble text-xs"></i> {{ $discussion->postsCount[0]->total }}</div>--}}
-{{--					        		</div>--}}
-
-{{--					        		<div class="forum_clear"></div>--}}
-{{--					        	</a>--}}
 				        	</li>
 			        	@endforeach
 		        	</ul>
