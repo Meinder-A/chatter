@@ -4,7 +4,7 @@
     @if(config('forum.sidebar_in_discussion_view'))
         <link href="{{ url('/forum/assets/vendor/spectrum/spectrum.css') }}" rel="stylesheet">
     @endif
-    <link href="{{ url('/forum/assets/css/forum.css') }}" rel="stylesheet">
+    <link href="/forum/assets/css/forum.css" rel="stylesheet">
     @if($forum_editor == 'simplemde')
         <link href="{{ url('/forum/assets/css/simplemde.min.css') }}" rel="stylesheet">
     @elseif($forum_editor == 'trumbowyg')
@@ -22,11 +22,18 @@
 
 <div id="forum" class="discussion">
 
-	<div id="forum_header" style="background-color:#263238;">
-		<div class="container">
+	<div id="forum_header" class="bg-tertiary">
+		<div class="bg-tertiary container">
 			<a class="back_btn" href="/{{ config('forum.routes.home') }}"><i class="forum-back"></i></a>
-			<h1>{{ $discussion->title }}</h1><span class="forum_head_details"> @lang('forum::messages.discussion.head_details')<a class="forum_cat" href="/{{ config('forum.routes.home') }}/{{ config('forum.routes.category') }}/{{ $discussion->category->slug }}" style="background-color:{{ $discussion->category->color }}">{{ $discussion->category->name }}</a></span>
+			<h1 style="font-size:19px;">{{ $discussion->title }}</h1>
+			<span class="hidden md:block forum_head_details">
+				<a class="forum_cat" href="/{{ config('forum.routes.home') }}/{{ config('forum.routes.category') }}/{{ $discussion->category->slug }}" style="background-color:{{ $discussion->category->color }}">{{ $discussion->category->name }}</a>
+			</span>
 		</div>
+		<span class="sm:block hidden">
+				<a class="forum_cat" href="/{{ config('forum.routes.home') }}/{{ config('forum.routes.category') }}/{{ $discussion->category->slug }}" style="background-color:{{ $discussion->category->color }}">{{ $discussion->category->name }}</a>
+
+		</span>
 	</div>
 
 	@if(config('forum.errors'))
@@ -107,9 +114,9 @@
 
 					        		<div class="forum_middle">
 					        			<span class="forum_middle_details"><a href="{{ \MeinderA\Forum\Helpers\ForumHelper::userLink($post->user) }}">{{ ucfirst($post->user->{config('forum.user.database_field_with_user_name')}) }}</a> <span class="ago forum_middle_details">{{ \Carbon\Carbon::createFromTimeStamp(strtotime($post->created_at))->diffForHumans() }}</span></span>
-					        			<div class="forum_body text-gray-100">
+					        			<div class="forum_body text-gray-300">
 					        				@if($post->markdown)
-					        					<pre class="forum_body_md text-gray-100">{{ $post->body }}</pre>
+					        					<pre class="forum_body_md text-gray-300">{{ $post->body }}</pre>
 					        					<?= \MeinderA\Forum\Helpers\ForumHelp::demoteHtmlHeaderTags( GrahamCampbell\Markdown\Facades\Markdown::convertToHtml( $post->body ) ); ?>
 					        					<!--?= GrahamCampbell\Markdown\Facades\Markdown::convertToHtml( $post->body ); ?-->
 					        				@else
@@ -185,7 +192,7 @@
 
 				@else
 
-					<div id="login_or_register" class="text-gray-100">
+					<div id="login_or_register" class="text-gray-300">
 						<p>
                             @lang('forum::messages.auth', ['home' => config('forum.routes.home')])
                         </p>

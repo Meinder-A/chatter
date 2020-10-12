@@ -10,7 +10,7 @@ tinymce.init({
 	menubar: false,
 	statusbar: false,
 	height : '220',
-	content_css : '/vendor/devdojo/forum/assets/css/forum.css',
+	content_css : '/forum/assets/css/forum.css',
 	template_popup_height: 380,
 	setup: function (editor) {
         editor.on('init', function(args) {

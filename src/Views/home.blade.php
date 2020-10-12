@@ -51,7 +51,7 @@
 		@endif
 	@endif
 
-	<div class="container forum_container">
+	<div class="px:0 container forum_container">
 
 	    <div class="row">
 
@@ -61,9 +61,51 @@
 					@auth
 					<a class="mb-3 text-center p-3 font-weight-bold rounded" style="background-color: rgba(255, 255, 255, 0.03);" href="#" id="new_discussion_btn"><i class="forum-new"></i> @lang('forum::messages.discussion.new')</a>
 					@endauth
-					<a class="mb-3 p-0" href="/{{ config('forum.routes.home') }}"><i class="forum-bubble"></i> @lang('forum::messages.discussion.all')</a>
-					<div class="md:d-block d-inline-flex w-full md:w-auto">
+					<div class="hidden md:block w-full md:w-auto">
+						<ul class="nav nav-pills nav-stacked" style="display: block;">
+							<li style="display: block;">
+								<a href="{{ route('forum.home') }}"><div class="forum-box bg-secondary"></div>All discussions
+								</a>
+							</li>
+						</ul>
           				{!! $categoriesMenu !!}
+					</div>
+
+					<div class="block md:hidden w-full">
+						<div class="block relative">
+							<select id="selectCategory" class="block appearance-none w-full bg-secondary text-gray-200 border border-secondary hover:border-gray-500 px-4 py-2 pr-8 rounded-top shadow leading-tight focus:outline-none focus:shadow-outline">
+								@php
+									$currentCategory = \MeinderA\Forum\Models\Category::find($current_category_id);
+									if (! $currentCategory) {
+										$allCategoriesSelected = true;
+									} else {
+										$allCategoriesSelected = false;
+									}
+								@endphp
+								<option value="null" @php if ($allCategoriesSelected) { echo 'selected'; } @endphp>All categories</option>
+								@foreach (\MeinderA\Forum\Models\Category::all() as $category)
+									<option value="{{ $category->slug }}"
+										@php if($currentCategory && $category->id === $currentCategory->id) {
+												echo ' selected ';
+											}
+										@endphp
+									>{{ $category->name }}</option>
+								@endforeach
+							</select>
+							<script>
+								$("#selectCategory").change(function () {
+									var selectedCategory = $(this).find("option:selected").attr('value');
+									if (selectedCategory === 'null') {
+										window.location = "{{ route('forum.home') }}";
+									} else {
+										window.location = "{{ route('forum.category.show', '') }}/" + selectedCategory;
+									}
+								});
+							</script>
+							<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center  px-2 text-gray-400">
+								<svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+							</div>
+						</div>
 					</div>
 				</div>
 				<!-- END SIDEBAR -->
@@ -72,32 +114,53 @@
 	        	<div class="panel">
 		        	<ul class="discussions">
 		        		@foreach($discussions as $discussion)
-				        	<li>
-				        		<a class="discussion_list" href="/{{ config('forum.routes.home') }}/{{ config('forum.routes.discussion') }}/{{ $discussion->category->slug }}/{{ $discussion->slug }}">
-					        		<div class="forum_avatar">
-										<button class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out">
+				        	<li style="height:75px;">
+								<div class="text-gray-300 border-bottom bg-tertiary border-secondary flex justify-content-between items-center text-sm md:text-md h-100">
+									<div class="mr-1 h-100" style="background-color: {{ $discussion->category->color }}; width: 3px;"></div>
+									<div class="w-auto mt-3 h-100">
+										<button class="flex text-sm md:text-md border-2 border-transparent rounded-full focus:outline-none focus:border-gray-200 transition duration-150 ease-in-out">
 											<img class="h-8 w-8 rounded-full object-cover" src="{{ $discussion->user->profile_photo_url }}" alt="{{ $discussion->user->name }}" />
 										</button>
-					        		</div>
+										<div class="text-muted text-xs">{{ $discussion->user->name }}</div>
+									</div>
+									<div class="w-4/6 block mt-3 pl-3">
+										<span class="font-bold">{{ $discussion->title }}</span>
+										@if($discussion->post[0]->markdown)
+											<?php $discussion_body = GrahamCampbell\Markdown\Facades\Markdown::convertToHtml( $discussion->post[0]->body ); ?>
+										@else
+											<?php $discussion_body = $discussion->post[0]->body; ?>
+										@endif
+										<p class="block text-xs md:text-sm text-muted overflow-hidden break-words">{{ substr(strip_tags($discussion_body), 0, 120) }}@if(strlen(strip_tags($discussion_body)) > 200){{ '...' }}@endif</p>
+									</div>
+									<div class="w-auto h-100 mt-3 px-3">
+										<span class="font-bold text-xs md:text-sm text-gray-500 block">{{ $discussion->postsCount[0]->total }} <i class="forum-bubble text-muted"></i></span>
+									</div>
+								</div>
+{{--				        		<a class="discussion_list" href="/{{ config('forum.routes.home') }}/{{ config('forum.routes.discussion') }}/{{ $discussion->category->slug }}/{{ $discussion->slug }}">--}}
+{{--					        		<div class="forum_avatar hidden md:block">--}}
+{{--										<button class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-200 transition duration-150 ease-in-out">--}}
+{{--											<img class="h-8 w-8 rounded-full object-cover" src="{{ $discussion->user->profile_photo_url }}" alt="{{ $discussion->user->name }}" />--}}
+{{--										</button>--}}
+{{--					        		</div>--}}
 
-					        		<div class="forum_middle">
-					        			<h3 class="forum_middle_title" style="color: #fff;">{{ $discussion->title }} <div class="forum_cat" style="background-color:{{ $discussion->category->color }}">{{ $discussion->category->name }}</div></h3>
-					        			<span class="forum_middle_details">@lang('forum::messages.discussion.posted_by') <span data-href="/user">{{ ucfirst($discussion->user->{config('forum.user.database_field_with_user_name')}) }}</span> {{ \Carbon\Carbon::createFromTimeStamp(strtotime($discussion->created_at))->diffForHumans() }}</span>
-					        			@if($discussion->post[0]->markdown)
-					        				<?php $discussion_body = GrahamCampbell\Markdown\Facades\Markdown::convertToHtml( $discussion->post[0]->body ); ?>
-					        			@else
-					        				<?php $discussion_body = $discussion->post[0]->body; ?>
-					        			@endif
-					        			<p>{{ substr(strip_tags($discussion_body), 0, 200) }}@if(strlen(strip_tags($discussion_body)) > 200){{ '...' }}@endif</p>
-					        		</div>
+{{--					        		<div class="ml-0 md:ml-3 sm:w-full forum_middle">--}}
+{{--					        			<h3 class="forum_middle_title" style="color: #fff;">{{ $discussion->title }} <div class="forum_cat" style="background-color:{{ $discussion->category->color }}">{{ $discussion->category->name }}</div></h3>--}}
+{{--					        			<span class="forum_middle_details">@lang('forum::messages.discussion.posted_by') <span data-href="/user">{{ ucfirst($discussion->user->{config('forum.user.database_field_with_user_name')}) }}</span> {{ \Carbon\Carbon::createFromTimeStamp(strtotime($discussion->created_at))->diffForHumans() }}</span>--}}
+{{--					        			@if($discussion->post[0]->markdown)--}}
+{{--					        				<?php $discussion_body = GrahamCampbell\Markdown\Facades\Markdown::convertToHtml( $discussion->post[0]->body ); ?>--}}
+{{--					        			@else--}}
+{{--					        				<?php $discussion_body = $discussion->post[0]->body; ?>--}}
+{{--					        			@endif--}}
+{{--					        			<p>{{ substr(strip_tags($discussion_body), 0, 200) }}@if(strlen(strip_tags($discussion_body)) > 200){{ '...' }}@endif</p>--}}
+{{--					        		</div>--}}
 
-					        		<div class="forum_right">
+{{--					        		<div class="forum_right w-1/4 text-sm">--}}
 
-					        			<div class="forum_count"><i class="forum-bubble"></i> {{ $discussion->postsCount[0]->total }}</div>
-					        		</div>
+{{--					        			<div class="font-bold forum_count" style="font-size: 13px !important;"><i class="font-weiforum-bubble text-xs"></i> {{ $discussion->postsCount[0]->total }}</div>--}}
+{{--					        		</div>--}}
 
-					        		<div class="forum_clear"></div>
-					        	</a>
+{{--					        		<div class="forum_clear"></div>--}}
+{{--					        	</a>--}}
 				        	</li>
 			        	@endforeach
 		        	</ul>
