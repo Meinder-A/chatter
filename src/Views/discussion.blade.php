@@ -30,10 +30,6 @@
 				<a class="forum_cat" href="/{{ config('forum.routes.home') }}/{{ config('forum.routes.category') }}/{{ $discussion->category->slug }}" style="background-color:{{ $discussion->category->color }}">{{ $discussion->category->name }}</a>
 			</span>
 		</div>
-		<span class="sm:block hidden">
-				<a class="forum_cat" href="/{{ config('forum.routes.home') }}/{{ config('forum.routes.category') }}/{{ $discussion->category->slug }}" style="background-color:{{ $discussion->category->color }}">{{ $discussion->category->name }}</a>
-
-		</span>
 	</div>
 
 	@if(config('forum.errors'))

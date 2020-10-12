@@ -115,27 +115,29 @@
 		        	<ul class="discussions">
 		        		@foreach($discussions as $discussion)
 				        	<li style="height:75px;">
-								<div class="text-gray-300 border-bottom bg-tertiary border-secondary flex justify-content-between items-center text-sm md:text-md h-100">
-									<div class="mr-1 h-100" style="background-color: {{ $discussion->category->color }}; width: 3px;"></div>
-									<div class="w-auto mt-3 h-100">
-										<button class="flex text-sm md:text-md border-2 border-transparent rounded-full focus:outline-none focus:border-gray-200 transition duration-150 ease-in-out">
-											<img class="h-8 w-8 rounded-full object-cover" src="{{ $discussion->user->profile_photo_url }}" alt="{{ $discussion->user->name }}" />
-										</button>
-										<div class="text-muted text-xs">{{ $discussion->user->name }}</div>
+								<a href="/{{ config('forum.routes.home') }}/{{ config('forum.routes.discussion') }}/{{ $discussion->category->slug }}/{{ $discussion->slug }}">
+									<div class="text-gray-300 border-bottom bg-tertiary border-secondary flex justify-content-between items-center text-sm md:text-md h-100">
+										<div class="mr-1 h-100" style="background-color: {{ $discussion->category->color }}; width: 3px;"></div>
+										<div class="w-auto mt-3 h-100">
+											<button class="flex text-sm md:text-md border-2 border-transparent rounded-full focus:outline-none focus:border-gray-200 transition duration-150 ease-in-out">
+												<img class="h-8 w-8 rounded-full object-cover" src="{{ $discussion->user->profile_photo_url }}" alt="{{ $discussion->user->name }}" />
+											</button>
+											<div class="text-muted text-xs">{{ $discussion->user->name }}</div>
+										</div>
+										<div class="w-4/6 block mt-3 pl-3">
+											<span class="font-bold">{{ $discussion->title }}</span>
+											@if($discussion->post[0]->markdown)
+												<?php $discussion_body = GrahamCampbell\Markdown\Facades\Markdown::convertToHtml( $discussion->post[0]->body ); ?>
+											@else
+												<?php $discussion_body = $discussion->post[0]->body; ?>
+											@endif
+											<p class="block text-xs md:text-sm text-muted overflow-hidden break-words">{{ substr(strip_tags($discussion_body), 0, 120) }}@if(strlen(strip_tags($discussion_body)) > 200){{ '...' }}@endif</p>
+										</div>
+										<div class="w-auto h-100 mt-3 px-3">
+											<span class="font-bold text-xs md:text-sm text-gray-500 block">{{ $discussion->postsCount[0]->total }} <i class="forum-bubble text-muted"></i></span>
+										</div>
 									</div>
-									<div class="w-4/6 block mt-3 pl-3">
-										<span class="font-bold">{{ $discussion->title }}</span>
-										@if($discussion->post[0]->markdown)
-											<?php $discussion_body = GrahamCampbell\Markdown\Facades\Markdown::convertToHtml( $discussion->post[0]->body ); ?>
-										@else
-											<?php $discussion_body = $discussion->post[0]->body; ?>
-										@endif
-										<p class="block text-xs md:text-sm text-muted overflow-hidden break-words">{{ substr(strip_tags($discussion_body), 0, 120) }}@if(strlen(strip_tags($discussion_body)) > 200){{ '...' }}@endif</p>
-									</div>
-									<div class="w-auto h-100 mt-3 px-3">
-										<span class="font-bold text-xs md:text-sm text-gray-500 block">{{ $discussion->postsCount[0]->total }} <i class="forum-bubble text-muted"></i></span>
-									</div>
-								</div>
+								</a>
 {{--				        		<a class="discussion_list" href="/{{ config('forum.routes.home') }}/{{ config('forum.routes.discussion') }}/{{ $discussion->category->slug }}/{{ $discussion->slug }}">--}}
 {{--					        		<div class="forum_avatar hidden md:block">--}}
 {{--										<button class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-200 transition duration-150 ease-in-out">--}}
@@ -223,11 +225,12 @@
 
             <input type="hidden" name="_token" id="csrf_token_field" value="{{ csrf_token() }}">
 
-            <div id="new_discussion_footer">
-            	<input type='text' id="color" name="color" /><span class="select_color_text">@lang('forum::messages.editor.select_color_text')</span>
-            	<button id="submit_discussion" class="btn btn-success pull-right"><i class="forum-new"></i> @lang('forum::messages.discussion.create')</button>
-            	<a href="/{{ config('forum.routes.home') }}" class="btn btn-default pull-right" id="cancel_discussion">@lang('forum::messages.words.cancel')</a>
-            	<div style="clear:both"></div>
+            <div id="new_discussion_footer" class="float-right">
+				<div class="pull-right">
+					<button id="submit_discussion" class="btn btn-primary pull-right"><i class="forum-new"></i> @lang('forum::messages.discussion.create')</button>
+					<a href="/{{ config('forum.routes.home') }}" class="btn btn-default pull-right" id="cancel_discussion">@lang('forum::messages.words.cancel')</a>
+					<div style="clear:both"></div>
+				</div>
             </div>
         </form>
 
